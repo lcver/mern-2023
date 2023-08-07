@@ -1,5 +1,5 @@
 // import http-status-codes
-const { StatusCodes } = rqeuire('http-status-codes')
+const { StatusCodes } = require('http-status-codes');
 // import custom-api
 const CustomAPIError = require('./custom-api-error');
 

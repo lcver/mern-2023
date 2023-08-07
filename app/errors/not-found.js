@@ -1,4 +1,4 @@
-const { StatusCodes } = rqeuire('http-status-codes')
+const { StatusCodes } = require('http-status-codes');
 const CustomAPIError = require('./custom-api-error');
 
 class NotFound extends CustomAPIError {
