@@ -1,72 +1,90 @@
-const Categories = require('../../api/v1/categories/model');
+const Categories = require("../../api/v1/categories/model");
 
-const { BadRequestError, NotFoundError } = require('../../errors');
+const { BadRequestError, NotFoundError } = require("../../errors");
 
 const getAllCategories = async () => {
-  const result = await Categories.find();
+    const result = await Categories.find();
 
-  return result;
+    return result;
 };
 
 const createCategories = async (req) => {
-  const { name } = req.body;
+    const { name } = req.body;
 
-  // cari categories dengan field name
-  const check = await Categories.findOne({ name });
+    // cari categories dengan field name
+    const check = await Categories.findOne({ name });
 
-  // apa bila check true / data categories sudah ada maka kita tampilkan error bad request
-  if (check) throw new BadRequestError('kategori nama duplikat');
+    // apa bila check true / data categories sudah ada maka kita tampilkan error bad request
+    if (check) throw new BadRequestError("kategori nama duplikat");
 
-  const result = await Categories.create({ name });
+    const result = await Categories.create({ name });
 
-  return result;
+    return result;
 };
 
 const getOneCategories = async (req) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  const result = await Categories.findOne({ _id: id });
+    const result = await Categories.findOne({ _id: id });
 
-  if (!result) throw new NotFoundError(`Tidak ada kategori dengan id : ${id}`);
+    if (!result)
+        throw new NotFoundError(`Tidak ada kategori dengan id : ${id}`);
 
-  return result;
+    return result;
 };
 
 const updateCategories = async (req) => {
-  const { id } = req.params;
-  const { name } = req.body;
+    const { id } = req.params;
+    const { name } = req.body;
 
-  const check = await Categories.findOne({
-    name,
-    _id: { $ne: id }
-  });
+    const check = await Categories.findOne({
+        name,
+        _id: { $ne: id },
+    });
 
-  if (check) throw new BadRequestError('kategori nama duplikat')
+    if (check) throw new BadRequestError("kategori nama duplikat");
 
-  const result = await Categories.findOneAndUpdate(
-    { _id: id },
-    { name },
-    { new: true, runValidators: true }
-  )
+    const result = await Categories.findOneAndUpdate(
+        { _id: id },
+        { name },
+        { new: true, runValidators: true }
+    );
 
-  if (!result) throw new NotFoundError(`Tidak ada Kategori dengan id : ${id}`)
+    if (!result)
+        throw new NotFoundError(`Tidak ada Kategori dengan id : ${id}`);
 
-  return result;
+    return result;
 };
 
 const deleteCategories = async (req) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  const result = await Categories.findOne({
-    _id: id
-  });
+    const result = await Categories.findOne({
+        _id: id,
+    });
 
-  if (!result) throw new NotFoundError(`Tidak ada Kategori dengan id : ${id}`)
+    if (!result)
+        throw new NotFoundError(`Tidak ada Kategori dengan id : ${id}`);
 
-  await result.remove();
+    await result.remove();
 
-  return result
+    return result;
 };
 
+const checkingCategories = async (id) => {
+    const result = await Categories.findOne({ _id: id });
 
-module.exports = { getAllCategories, createCategories, getOneCategories, updateCategories, deleteCategories };
+    if (!result)
+        throw new NotFoundError(`Tidak ada Kategori dengan id : ${id}`);
+
+    return result;
+};
+
+module.exports = {
+    getAllCategories,
+    createCategories,
+    getOneCategories,
+    updateCategories,
+    deleteCategories,
+    checkingCategories,
+};
